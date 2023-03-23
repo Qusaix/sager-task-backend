@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +22,29 @@ Route::group([
 
 });
 
-Route::middleware('checkAuth')->prefix('home')->controller(HomeController::class)->group(function(){
+Route::middleware('checkAuth')->prefix('dashboard')->controller(HomeController::class)->group(function(){
     Route::get('/','index');
+
+    Route::controller(ProductController::class)->prefix('products')->group(function(){
+        Route::get('/','index');
+        Route::post('store','store');
+        Route::post('update/{id}','update');
+        Route::post('delete/{id}','delete');
+    });
+
+    Route::controller(CategoryController::class)->prefix('categories')->group(function(){
+        Route::get('/','index');
+        Route::post('/store','store');
+        Route::post('/update/{id}','update');
+        Route::post('/delete/{id}','delete');
+    });
+
+    Route::controller(UserController::class)->prefix('users')->group(function(){
+        Route::get('/','index');
+        Route::post('/store','store');
+        Route::post('/update/{id}','update');
+        Route::post('/delete/{id}','delete');
+    });
+
+
 });

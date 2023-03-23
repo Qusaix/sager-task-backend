@@ -76,7 +76,7 @@ class AuthController extends Controller
                 'user'=>[
                     'name'=>$user->full_name,
                     'email'=>$user->email,
-                    'image'=>'xxx'
+                    'image'=>$user->image
                 ],
                 'access_token' => $token,
                 'token_type' => 'bearer',
@@ -90,7 +90,9 @@ class AuthController extends Controller
         try
         {
             $data = array_merge($request->all(),['password'=>bcrypt($request->password)]);
-            User::create($data);
+            $data = User::create($data);
+            $data->addMedia($request->file('image'))
+            ->toMediaCollection('image');
             return response()->json([
                 'msg'=>'User was created',
             ],200);

@@ -8,11 +8,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 
-class User extends Authenticatable implements JWTSubject
+
+class User extends Authenticatable implements JWTSubject , HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable , InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +50,10 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    protected $append = [
+        'image'
+    ];
+
 
     public function getJWTIdentifier()
     {
@@ -61,5 +68,16 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class,'user_id');
+    }
+
+
+    public function getImageAttribute()
+    {
+        return $this->getFirstMediaUrl('image');
     }
 }
