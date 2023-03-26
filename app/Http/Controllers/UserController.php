@@ -63,6 +63,24 @@ class UserController extends Controller
     }
 
 
+    public function details($id)
+    {
+        $data = User::find($id);
+        if(!$data)
+        {
+            return response()->json([
+                'err'=>'User was not found',
+                'status'=>404
+            ],404);
+        }
+
+        return response()->json([
+            'msg'=>'User Details',
+            'data'=>$this->response($data)
+        ],200);
+    }
+
+
     public function delete($id)
     {
         try
@@ -92,6 +110,7 @@ class UserController extends Controller
             ],500);
         }
     }
+    
 
     private function response($item)
     {

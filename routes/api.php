@@ -44,6 +44,7 @@ Route::middleware('checkAuth')->prefix('dashboard')->controller(HomeController::
         Route::post('/store','store');
         Route::post('/update/{id}','update');
         Route::post('/delete/{id}','delete');
+        Route::get('/details/{id}','details');
     });
 
 
